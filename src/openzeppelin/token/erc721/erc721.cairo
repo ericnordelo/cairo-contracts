@@ -178,7 +178,8 @@ mod ERC721 {
 
             let caller = get_caller_address();
             assert(
-                owner == caller || ERC721Impl::is_approved_for_all(@self, owner, caller), 'ERC721: unauthorized caller'
+                owner == caller || ERC721Impl::is_approved_for_all(@self, owner, caller),
+                'ERC721: unauthorized caller'
             );
             self._approve(to, token_id);
         }
@@ -193,7 +194,8 @@ mod ERC721 {
             ref self: ContractState, from: ContractAddress, to: ContractAddress, token_id: u256
         ) {
             assert(
-                self._is_approved_or_owner(get_caller_address(), token_id), 'ERC721: unauthorized caller'
+                self._is_approved_or_owner(get_caller_address(), token_id),
+                'ERC721: unauthorized caller'
             );
             self._transfer(from, to, token_id);
         }
@@ -206,7 +208,8 @@ mod ERC721 {
             data: Span<felt252>
         ) {
             assert(
-                self._is_approved_or_owner(get_caller_address(), token_id), 'ERC721: unauthorized caller'
+                self._is_approved_or_owner(get_caller_address(), token_id),
+                'ERC721: unauthorized caller'
             );
             self._safe_transfer(from, to, token_id, data);
         }
@@ -282,10 +285,14 @@ mod ERC721 {
             !self._owners.read(token_id).is_zero()
         }
 
-        fn _is_approved_or_owner(self: @ContractState, spender: ContractAddress, token_id: u256) -> bool {
+        fn _is_approved_or_owner(
+            self: @ContractState, spender: ContractAddress, token_id: u256
+        ) -> bool {
             let owner = self._owner_of(token_id);
-            let is_approved_for_all =  ERC721Impl::is_approved_for_all(self, owner, spender);
-            owner == spender || is_approved_for_all || spender == ERC721Impl::get_approved(self, token_id)
+            let is_approved_for_all = ERC721Impl::is_approved_for_all(self, owner, spender);
+            owner == spender
+                || is_approved_for_all
+                || spender == ERC721Impl::get_approved(self, token_id)
         }
 
         fn _approve(ref self: ContractState, to: ContractAddress, token_id: u256) {
@@ -293,13 +300,18 @@ mod ERC721 {
             assert(owner != to, 'ERC721: approval to owner');
 
             self._token_approvals.write(token_id, to);
-            self.emit(Approval{owner, approved: to, token_id});
+            self.emit(Approval { owner, approved: to, token_id });
         }
 
-        fn _set_approval_for_all(ref self: ContractState, owner: ContractAddress, operator: ContractAddress, approved: bool) {
+        fn _set_approval_for_all(
+            ref self: ContractState,
+            owner: ContractAddress,
+            operator: ContractAddress,
+            approved: bool
+        ) {
             assert(owner != operator, 'ERC721: self approval');
             self._operator_approvals.write((owner, operator), approved);
-            self.emit(ApprovalForAll{owner, operator, approved});
+            self.emit(ApprovalForAll { owner, operator, approved });
         }
 
         fn _mint(ref self: ContractState, to: ContractAddress, token_id: u256) {
@@ -309,10 +321,12 @@ mod ERC721 {
             self._balances.write(to, self._balances.read(to) + 1);
             self._owners.write(token_id, to);
 
-            self.emit(Transfer{from: Zeroable::zero(), to, token_id});
+            self.emit(Transfer { from: Zeroable::zero(), to, token_id });
         }
 
-        fn _transfer(ref self: ContractState, from: ContractAddress, to: ContractAddress, token_id: u256) {
+        fn _transfer(
+            ref self: ContractState, from: ContractAddress, to: ContractAddress, token_id: u256
+        ) {
             assert(!to.is_zero(), 'ERC721: invalid receiver');
             let owner = self._owner_of(token_id);
             assert(from == owner, 'ERC721: wrong sender');
@@ -324,7 +338,7 @@ mod ERC721 {
             self._balances.write(to, self._balances.read(to) + 1);
             self._owners.write(token_id, to);
 
-            self.emit(Transfer{from, to, token_id});
+            self.emit(Transfer { from, to, token_id });
         }
 
         fn _burn(ref self: ContractState, token_id: u256) {
@@ -336,10 +350,12 @@ mod ERC721 {
             self._balances.write(owner, self._balances.read(owner) - 1);
             self._owners.write(token_id, Zeroable::zero());
 
-            self.emit(Transfer{from: owner, to: Zeroable::zero(), token_id});
+            self.emit(Transfer { from: owner, to: Zeroable::zero(), token_id });
         }
 
-        fn _safe_mint(ref self: ContractState, to: ContractAddress, token_id: u256, data: Span<felt252>) {
+        fn _safe_mint(
+            ref self: ContractState, to: ContractAddress, token_id: u256, data: Span<felt252>
+        ) {
             self._mint(to, token_id);
             assert(
                 _check_on_erc721_received(Zeroable::zero(), to, token_id, data),
@@ -347,11 +363,17 @@ mod ERC721 {
             );
         }
 
-        fn _safe_transfer(ref self: ContractState, 
-            from: ContractAddress, to: ContractAddress, token_id: u256, data: Span<felt252>
+        fn _safe_transfer(
+            ref self: ContractState,
+            from: ContractAddress,
+            to: ContractAddress,
+            token_id: u256,
+            data: Span<felt252>
         ) {
             self._transfer(from, to, token_id);
-            assert(_check_on_erc721_received(from, to, token_id, data), 'ERC721: safe transfer failed');
+            assert(
+                _check_on_erc721_received(from, to, token_id, data), 'ERC721: safe transfer failed'
+            );
         }
 
         fn _set_token_uri(ref self: ContractState, token_id: u256, token_uri: felt252) {
