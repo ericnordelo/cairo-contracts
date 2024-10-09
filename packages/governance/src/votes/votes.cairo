@@ -32,7 +32,7 @@ pub mod VotesComponent {
     use openzeppelin_utils::cryptography::snip12::{OffchainMessageHash, SNIP12Metadata};
     use openzeppelin_utils::nonces::NoncesComponent::InternalTrait as NoncesInternalTrait;
     use openzeppelin_utils::nonces::NoncesComponent;
-    use openzeppelin_utils::structs::vec_checkpoint::{Trace, TraceTrait};
+    use openzeppelin_utils::structs::checkpoint::{Trace, TraceTrait};
     use starknet::storage::{Map, StoragePathEntry, StorageMapReadAccess, StorageMapWriteAccess};
     use super::{TokenVotesTrait, ContractAddress};
 

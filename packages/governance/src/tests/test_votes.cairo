@@ -15,7 +15,7 @@ use openzeppelin_token::erc721::ERC721Component::{
 };
 use openzeppelin_token::erc721::ERC721Component::{ERC721Impl, ERC721CamelOnlyImpl};
 use openzeppelin_utils::cryptography::snip12::OffchainMessageHash;
-use openzeppelin_utils::structs::vec_checkpoint::TraceTrait;
+use openzeppelin_utils::structs::checkpoint::TraceTrait;
 use snforge_std::signature::stark_curve::{StarkCurveKeyPairImpl, StarkCurveSignerImpl};
 use snforge_std::{
     start_cheat_block_timestamp_global, start_cheat_caller_address, spy_events, test_address
