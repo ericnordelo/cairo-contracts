@@ -3,9 +3,9 @@
 
 use core::num::traits::Sqrt;
 use openzeppelin_utils::math;
-use starknet::storage_access::StorePacking;
 use starknet::storage::{StoragePath, StorageAsPath, Vec, VecTrait, Mutable, MutableVecTrait};
 use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
+use starknet::storage_access::StorePacking;
 
 /// `Trace` struct, for checkpointing values as they change at different points in
 /// time, and later looking up past values by block timestamp.
@@ -142,7 +142,9 @@ impl CheckpointImpl of CheckpointTrait {
     /// Returns the index of the last (most recent) checkpoint with the key lower than or equal to
     /// the search key, or `high` if there is none. `low` and `high` define a section where to do
     /// the search, with inclusive `low` and exclusive `high`.
-    fn _upper_binary_lookup(self: StoragePath<Vec<Checkpoint>>, key: u64, low: u64, high: u64) -> u64 {
+    fn _upper_binary_lookup(
+        self: StoragePath<Vec<Checkpoint>>, key: u64, low: u64, high: u64
+    ) -> u64 {
         let mut _low = low;
         let mut _high = high;
         loop {

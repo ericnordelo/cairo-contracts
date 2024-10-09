@@ -33,9 +33,7 @@ pub mod VotesComponent {
     use openzeppelin_utils::nonces::NoncesComponent::InternalTrait as NoncesInternalTrait;
     use openzeppelin_utils::nonces::NoncesComponent;
     use openzeppelin_utils::structs::vec_checkpoint::{Trace, TraceTrait};
-    use starknet::storage::{
-        Map, StoragePathEntry, StorageMapReadAccess, StorageMapWriteAccess
-    };
+    use starknet::storage::{Map, StoragePathEntry, StorageMapReadAccess, StorageMapWriteAccess};
     use super::{TokenVotesTrait, ContractAddress};
 
     #[storage]
