@@ -152,8 +152,7 @@ impl CheckpointImpl of CheckpointTrait {
                 break;
             }
             let mid = math::average(_low, _high);
-            let mut checkpoint = self[mid].read();
-            if (checkpoint.key > key) {
+            if (self[mid].read().key > key) {
                 _high = mid;
             } else {
                 _low = mid + 1;
