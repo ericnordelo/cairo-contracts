@@ -94,7 +94,7 @@ pub impl TraceImpl of TraceTrait {
         if (pos == 0) {
             (false, 0, 0)
         } else {
-            let checkpoint: Checkpoint = checkpoints[pos - 1].read();
+            let checkpoint = checkpoints[pos - 1].read();
             (true, checkpoint.key, checkpoint.value)
         }
     }
@@ -119,7 +119,7 @@ impl CheckpointImpl of CheckpointTrait {
         let pos = self.len();
 
         if (pos > 0) {
-            let mut last: Checkpoint = self[pos - 1].read();
+            let mut last = self[pos - 1].read();
 
             // Checkpoint keys must be non-decreasing
             assert(last.key <= key, 'Unordered insertion');
@@ -152,7 +152,7 @@ impl CheckpointImpl of CheckpointTrait {
                 break;
             }
             let mid = math::average(_low, _high);
-            let mut checkpoint: Checkpoint = self[mid].read();
+            let mut checkpoint = self[mid].read();
             if (checkpoint.key > key) {
                 _high = mid;
             } else {
